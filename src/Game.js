@@ -8,4 +8,6 @@ const game = new Application({
 
 document.body.append(game.view);
 
-export default game;
+export function getRootContainer() {
+    return game.stage;
+}
