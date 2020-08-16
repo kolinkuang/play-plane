@@ -1,13 +1,16 @@
 // init game canvas
 import {Application} from "pixi.js";
+import {width, height} from './constants/Constants';
 
 const game = new Application({
-    width: 750,
-    height: 1080
+    width,
+    height
 });
 
 document.body.append(game.view);
 
-export function getRootContainer() {
+function getRootContainer() {
     return game.stage;
 }
+
+export {getRootContainer, game};

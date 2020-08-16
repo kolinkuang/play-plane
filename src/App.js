@@ -1,21 +1,41 @@
 // vue3 root component
-import {defineComponent, h} from '@vue/runtime-core';
-import Circle from './components/Circle';
+// vue3 根组件
+import {defineComponent, h, computed, ref} from '@vue/runtime-core';
+import StartPage from './page/StartPage';
+import GamePage from './page/GamePage';
 
 // template -> render
 export default defineComponent({
 
-    render() {
-        // <div x="100" y="100">kaikeba<circle></circle></div>
-        const vnode = h('rect', {
-            x: 100,
-            y: 100
-        }, [
-            'kaikebar',
-            h(Circle)
+    setup() {
+        // create reactive object: ref
+        // vue2 data
+        // const currentPageName = ref('StartPage');
+        const currentPageName = ref('GamePage');
+
+        const pageMap = {
+            StartPage,
+            GamePage
+        };
+
+        // computed attribute
+        const currentPage = computed(() => {
+            return pageMap[currentPageName.value];
+        });
+        return {
+            currentPage,
+            currentPageName
+        };
+    },
+
+    render(ctx) {
+        return h('Container', [
+            h(ctx.currentPage, {
+                onChangePage(page) {
+                    ctx.currentPageName = page;
+                }
+            })
         ]);
-        console.log(vnode);
-        return vnode;
     }
 
 });

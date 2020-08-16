@@ -1,27 +1,20 @@
 import {createRenderer} from "@vue/runtime-core";
-import {Graphics, Text} from 'pixi.js';
+import {Text, Container, Sprite, Texture} from 'pixi.js';
 
 // 自定义渲染器（可跨平台）
 const renderer = createRenderer({
     createElement(type, isSVG, isCustomizedBuiltIn) {
-        // 创建元素
-        console.log(type);
-
+        // 创建元素：将Vue 虚拟 DOM 映射成 pixi.js 的元素
         // create canvas element based on type
         let element;
-        if (type === 'rect') {
-            // create a rectangle
-            element = new Graphics();
-            element.beginFill(0xff0000);
-            element.drawRect(0,0,200,500);
-            element.endFill();
-        }
-        else if (type === 'circle') {
-            // create a circle
-            element = new Graphics();
-            element.beginFill(0xffff00);
-            element.drawCircle(0,0,50);
-            element.endFill();
+
+        switch (type) {
+            case 'Container':
+                element = new Container();
+                break;
+            case 'Sprite':
+                element = new Sprite();
+                break;
         }
 
         return element;
@@ -29,15 +22,19 @@ const renderer = createRenderer({
     insert(el, parent) {
         // append （创建完元素后，添加进容器）
         parent.addChild(el);
-        console.log(el, parent);
     },
     patchProp(el, key, prevValue, nextValue, isSVG, prevChildren, parentComponent, parentSuspense, unmountChildren) {
-        // pixi
-        if (key === 'x') {
-            el.x = nextValue;
-        }
-        if (key === 'y') {
-            el.y = nextValue;
+        // patch pixi 元素的属性
+        switch (key) {
+            case 'texture':
+                el.texture = Texture.from(nextValue);
+                break;
+            case 'onClick':
+                el.on('pointertap', nextValue);
+                break;
+            default:
+                el[key] = nextValue;
+                break;
         }
     },
     setElementText(node, text) {
@@ -47,6 +44,18 @@ const renderer = createRenderer({
     },
     createText(text) {
         return new Text(text);
+    },
+    createComment(text) {
+    },
+    parentNode(node) {
+    },
+    nextSibling(node) {
+    },
+    remove(el) {
+        const parent = el.parent;
+        if (parent) {
+            parent.removeChild(el);
+        }
     }
 });
 
