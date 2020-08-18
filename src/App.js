@@ -3,6 +3,7 @@
 import {defineComponent, h, computed, ref} from '@vue/runtime-core';
 import StartPage from './page/StartPage';
 import GamePage from './page/GamePage';
+import EndPage from './page/EndPage';
 
 // template -> render
 export default defineComponent({
@@ -15,7 +16,8 @@ export default defineComponent({
 
         const pageMap = {
             StartPage,
-            GamePage
+            GamePage,
+            EndPage
         };
 
         // computed attribute
