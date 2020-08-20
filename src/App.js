@@ -1,5 +1,5 @@
 // vue3 root component
-// vue3 根组件
+// 定义 vue3 根组件
 import {defineComponent, h, computed, ref} from '@vue/runtime-core';
 import StartPage from './page/StartPage';
 import GamePage from './page/GamePage';
@@ -11,8 +11,8 @@ export default defineComponent({
     setup() {
         // create reactive object: ref
         // vue2 data
-        // const currentPageName = ref('StartPage');
-        const currentPageName = ref('GamePage');
+        const currentPageName = ref('StartPage');
+        // const currentPageName = ref('GamePage');
 
         const pageMap = {
             StartPage,
