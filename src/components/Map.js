@@ -11,7 +11,7 @@ export default defineComponent({
         const mapY1 = ref(0);
         const mapY2 = ref(-viewHeight);
 
-        const speed = 5;
+        const speed = 3;
         game.ticker.add(() => {
             mapY1.value += speed;
             mapY2.value += speed;

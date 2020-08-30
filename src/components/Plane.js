@@ -5,20 +5,33 @@ export default defineComponent({
 
     props: ['x', 'y'],
 
-    setup(props) {
+    setup(props, {emit}) {
         // props is readonly.
-        // let point = reactive({x: props.x, y: props.y});
-        //
-        // watch(props, value => {
-        //     point.x = value.x;
-        //     point.y = value.y;
-        // });
-        //
-        // return {
-        //     point
-        // };
-
         let {x, y} = toRefs(props);
+
+        // 通过键盘控制飞机移动
+        const eventMap = {
+            'ArrowUp'() {
+                emit('keyUp');
+            },
+            'ArrowDown'() {
+                emit('keyDown');
+            },
+            'ArrowLeft'() {
+                emit('keyLeft');
+            },
+            'ArrowRight'() {
+                emit('keyRight');
+            },
+            'Space'() {
+                emit('attack', {x: x.value + 100, y: y.value});
+            }
+        };
+        window.addEventListener('keydown', e => {
+            const fn = eventMap[e.code];
+            typeof fn === 'function' && fn();
+        });
+
         return {
             x, y
         };

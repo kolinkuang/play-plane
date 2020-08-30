@@ -1,5 +1,5 @@
 const width = 750;
-const height = 1080;
+const height = 950;
 
 export {
     width,
