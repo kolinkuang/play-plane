@@ -1,6 +1,6 @@
 // init game canvas
 import {Application} from "pixi.js";
-import {width, height} from './constants/Constants';
+import {width, height} from './config';
 
 // 定义根容器
 const game = new Application({
@@ -14,4 +14,8 @@ function getRootContainer() {
     return game.stage;
 }
 
-export {getRootContainer, game};
+function getTickerForUpdate() {
+    return game.ticker;
+}
+
+export {getRootContainer, getTickerForUpdate};

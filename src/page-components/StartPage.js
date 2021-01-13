@@ -1,12 +1,11 @@
 import {h, defineComponent} from '@vue/runtime-core';
-import endPageImg from '../../assets/endPage.jpg';
-import restartBtn from '../../assets/restartBtn.png';
+import startPageImg from '../../assets/startPage.jpg';
+import startBtn from '../../assets/startBtn.png';
 
 export default defineComponent({
 
-    //vue2 this.$emit
+    // Vue 2: this.$emit()
     setup(props, ctx) {
-        // ctx.emit;
         return {
             handleClick() {
                 ctx.emit('changePage', 'GamePage');
@@ -18,10 +17,10 @@ export default defineComponent({
         //<div><img src=""></div>
         return h('Container', [
             h('Sprite', {
-                texture: endPageImg
+                texture: startPageImg
             }),
             h('Sprite', {
-                texture: restartBtn,
+                texture: startBtn,
                 x: 227,
                 y: 514,
                 interactive: true,

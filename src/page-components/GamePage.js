@@ -3,49 +3,14 @@ import Map from '../components/Map';
 import Plane from '../components/Plane';
 import EnemyPlane from '../components/EnemyPlane';
 import Bullet from '../components/Bullet';
-import {game} from '../Game';
+import {getTickerForUpdate} from '../Game';
 import {areObjectsCollide} from '../utils';
+import updateSelfPlaneMovement from '../handler-components/SelfPlaneMovementHandler';
 
 export default defineComponent({
 
     setup(props, {emit}) {
-        // entry
-        const {planeInfo} = useCreateSelfPlane(emit);
-        const {enemyPlaneInfos, moveEnemyPlane} = useCreateEnemyPlanes();
-        const {bullets, moveBullets, addBullet} = useCreateBullets();
-
-        function handleTicker() {
-            moveEnemyPlane(enemyPlaneInfos);
-            // 碰撞检测
-            enemyPlaneInfos.forEach(enemy => {
-                if (areObjectsCollide(enemy, planeInfo)) {
-                    // game over
-                    emit('changePage', 'EndPage');
-                }
-            });
-
-            moveBullets(bullets);
-
-            bullets.forEach((bulletInfo, bulletInfoIndex) => {
-                enemyPlaneInfos.forEach((enemyPlane, enemyPlaneIndex) => {
-                    if (areObjectsCollide(bulletInfo, enemyPlane)) {
-                        bullets.splice(bulletInfoIndex, 1);
-                        enemyPlaneInfos.splice(enemyPlaneIndex, 1);
-                    }
-                });
-            });
-        }
-
-        onMounted(() => game.ticker.add(handleTicker));
-        onUnmounted(() => game.ticker.remove(handleTicker));
-
-        return {
-            planeInfo,
-            enemyPlaneInfos,
-            bullets,
-            addBullet,
-            emit
-        };
+        return useFighting(emit);
     },
 
     render(ctx) {
@@ -55,24 +20,25 @@ export default defineComponent({
 
         function createSelfPlane(ctx) {
             return h(Plane, {
+                // ...updateSelfPlaneMovement({x, y, speed}),
                 x,
                 y,
                 interactive: true,
                 onAttack(BulletInfo) {
                     ctx.addBullet(BulletInfo);
                 },
-                onKeyUp() {
-                    ctx.planeInfo.y -= speed;
-                },
-                onKeyDown() {
-                    ctx.planeInfo.y += speed;
-                },
-                onKeyLeft() {
-                    ctx.planeInfo.x -= speed;
-                },
-                onKeyRight() {
-                    ctx.planeInfo.x += speed;
-                }
+                // onKeyArrowUp() {
+                //     ctx.planeInfo.y -= speed;
+                // },
+                // onKeyArrowDown() {
+                //     ctx.planeInfo.y += speed;
+                // },
+                // onKeyArrowLeft() {
+                //     ctx.planeInfo.x -= speed;
+                // },
+                // onKeyArrowRight() {
+                //     ctx.planeInfo.x += speed;
+                // }
             });
         }
 
@@ -98,7 +64,48 @@ export default defineComponent({
 
 });
 
+function useFighting (emit) {
+    // entry
+    const {planeInfo} = useCreateSelfPlane(emit);
+    const {enemyPlaneInfos, moveEnemyPlane} = useCreateEnemyPlanes();
+    const {bullets, moveBullets, addBullet} = useCreateBullets();
+
+    function handleTicker() {
+        moveEnemyPlane(enemyPlaneInfos);
+        // 碰撞检测
+        enemyPlaneInfos.forEach(enemy => {
+            if (areObjectsCollide(enemy, planeInfo)) {
+                // game over
+                emit('changePage', 'EndPage');
+            }
+        });
+
+        moveBullets(bullets);
+
+        bullets.forEach((bulletInfo, bulletInfoIndex) => {
+            enemyPlaneInfos.forEach((enemyPlane, enemyPlaneIndex) => {
+                if (areObjectsCollide(bulletInfo, enemyPlane)) {
+                    bullets.splice(bulletInfoIndex, 1);
+                    enemyPlaneInfos.splice(enemyPlaneIndex, 1);
+                }
+            });
+        });
+    }
+
+    onMounted(() => getTickerForUpdate().add(handleTicker));
+    onUnmounted(() => getTickerForUpdate().remove(handleTicker));
+
+    return {
+        planeInfo,
+        enemyPlaneInfos,
+        bullets,
+        addBullet,
+        emit
+    };
+}
+
 function useCreateSelfPlane() {
+    // const {moveX, moveY} = updateSelfPlaneMovement();
     //reactive data
     const planeInfo = reactive({
         x: 150,

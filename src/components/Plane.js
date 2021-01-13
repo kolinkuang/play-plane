@@ -9,20 +9,19 @@ export default defineComponent({
         // props is readonly.
         let {x, y} = toRefs(props);
 
-        // 通过键盘控制飞机移动
         const eventMap = {
-            'ArrowUp'() {
-                emit('keyUp');
-            },
-            'ArrowDown'() {
-                emit('keyDown');
-            },
-            'ArrowLeft'() {
-                emit('keyLeft');
-            },
-            'ArrowRight'() {
-                emit('keyRight');
-            },
+            // 'ArrowUp'() {
+            //     emit('keyArrowUp');
+            // },
+            // 'ArrowDown'() {
+            //     emit('keyArrowDown');
+            // },
+            // 'ArrowLeft'() {
+            //     emit('keyArrowLeft');
+            // },
+            // 'ArrowRight'() {
+            //     emit('keyArrowRight');
+            // },
             'Space'() {
                 emit('attack', {x: x.value + 100, y: y.value});
             }

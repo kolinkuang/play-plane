@@ -13,13 +13,13 @@ const typeElementMap = {
 };
 
 const patchPropMap = {
-    texture(el, key, nextValue) {
+    'texture'(el, key, nextValue) {
         el.texture = Texture.from(nextValue);
     },
-    onClick(el, key, nextValue) {
+    'onClick'(el, key, nextValue) {
         el.on('pointertap', nextValue);
     },
-    default(el, key, nextValue) {
+    'default'(el, key, nextValue) {
         el[key] = nextValue;
     }
 };
