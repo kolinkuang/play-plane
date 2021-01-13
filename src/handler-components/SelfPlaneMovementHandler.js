@@ -75,7 +75,7 @@ function updateSelfPlaneMovement({x, y, speed}) {
     }
 
     function addCommand(commandQueue, command) {
-        commandQueue.unshift(command);
+        commandQueue.unshift(command); // in that case the latest entered command would be applied
         if (commandQueue.length > 5) {
             // to limit the queue length
             commandQueue.pop();
