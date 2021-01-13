@@ -7,25 +7,15 @@ export default defineComponent({
 
     setup(props, {emit}) {
         // props is readonly.
-        let {x, y} = toRefs(props);
+        const {x, y} = toRefs(props);
 
         const eventMap = {
-            // 'ArrowUp'() {
-            //     emit('keyArrowUp');
-            // },
-            // 'ArrowDown'() {
-            //     emit('keyArrowDown');
-            // },
-            // 'ArrowLeft'() {
-            //     emit('keyArrowLeft');
-            // },
-            // 'ArrowRight'() {
-            //     emit('keyArrowRight');
-            // },
             'Space'() {
                 emit('attack', {x: x.value + 100, y: y.value});
             }
         };
+
+        // 发射子弹
         window.addEventListener('keydown', e => {
             const fn = eventMap[e.code];
             typeof fn === 'function' && fn();

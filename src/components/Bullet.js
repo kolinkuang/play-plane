@@ -1,12 +1,13 @@
 import {h, defineComponent, toRefs} from '@vue/runtime-core';
 import bulletImg from '../../assets/bullet.png';
 
+// 我方子弹逻辑
 export default defineComponent({
 
     props: ['x', 'y'],
 
     setup(props) {
-        let {x, y} = toRefs(props);
+        const {x, y} = toRefs(props);
         return {
             x, y
         };

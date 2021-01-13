@@ -1,6 +1,6 @@
 import {ref, onMounted, onUnmounted} from '@vue/runtime-core';
 import {getTickerForUpdate} from '../Game';
-import {CommandMap, CommandType} from '../config/commandConfig';
+import {CommandMap, CommandType} from '../config/CommandConfig';
 
 /**
  * 命令模式
@@ -27,6 +27,7 @@ function updateSelfPlaneMovement({x, y, speed}) {
         window.removeEventListener('keyup', handleKeyup);
     });
 
+    // handle automatically
     function handleTicker() {
         handleUpDownMovement();
         handleLeftRightMovement();
@@ -54,6 +55,7 @@ function updateSelfPlaneMovement({x, y, speed}) {
         return commandQueue.find(command => command.type === CommandType.LeftRight);
     }
 
+    // handle manually
     function handleKeydown(e) {
         const command = CommandMap[e.code];
         if (command && !isExistingCommand(command)) {
@@ -69,7 +71,7 @@ function updateSelfPlaneMovement({x, y, speed}) {
     }
 
     function isExistingCommand(command) {
-        return Object.values(CommandMap).includes(command);
+        return commandQueue.some(c => c.id === command.id);
     }
 
     function addCommand(commandQueue, command) {
